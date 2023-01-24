@@ -1,0 +1,45 @@
+<h1>Task list</h1>
+
+<div class="actions-container">
+  <div class="form-group">
+    <label>Type here to filter tasks</label>
+    <input type="text" class="form-control" [formControl]="filter">
+  </div>
+
+  <div class="create-task">
+    <a class="btn-link" routerLink="/create-page">Create new task</a>
+  </div>
+</div>
+
+<ng-container *ngIf="(tasks$ | async)?.length; else noResults">
+  <div *ngFor="let task of tasks$ | async">
+    <app-task
+      [task]="task"
+      (statusChange)="updateTask($event)"
+      (update)="redirectToEditTaskPage($event)"
+      (delete)="openDeleteTaskModal(deleteModal); setTaskToDelete($event)">
+    </app-task>
+  </div>
+</ng-container>
+
+<ng-template #deleteModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Delete task confirmation</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure you want to delete this task ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Cancel click')">No</button>
+    <button type="button" class="btn btn-danger" (click)="deleteTask()">Yes</button>
+  </div>
+</ng-template>
+
+<ng-template #noResults>
+  <div>
+    <p>No results matching this value</p>
+  </div>
+</ng-template>

@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "8356e1a6-f7ed-4beb-b643-f7507eb71724"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -61,6 +64,14 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
           }
         },
@@ -72,8 +83,12 @@
           "configurations": {
             "production": {
               "browserTarget": "tech-test:build:production"
+            },
+            "development": {
+              "browserTarget": "tech-test:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

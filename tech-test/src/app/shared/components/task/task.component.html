@@ -1,0 +1,15 @@
+<li class="card">
+  <div class="card-body">
+
+    <app-form-check [done]="task.done" (checkChange)="onCheckChange($event)">
+      <span *ngIf="task.done">Congratulations! You've completed this task on <b>{{task.done}}</b></span>
+    </app-form-check>
+
+    <h5 class="card-title">Label: {{task.label}}</h5>
+    <p class="card-text">Category: {{task.category}}</p>
+    <p class="card-text">Description: {{task.description}}</p>
+
+    <button type="button" class="btn btn-primary" (click)="update.emit(task)">Edit</button>
+    <button type="button" class="btn btn-danger" (click)="delete.emit(task)">Delete</button>
+  </div>
+</li>
