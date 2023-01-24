@@ -1,7 +1,4 @@
 # Angular Technical Test
-We've designed a small remote technical test, that is open ended. You should be able to make choices and assumptions without guidance. We're interested in seeing how you think and architect out the code. You should not spend more than 3 hours on this so think strategically about what you want to show.
-
-Clone this repo and send us a link to your work. We will review ASAP and decide whether to invite in for interview.
 
 ###  Spec:
 We want to test your ability to write clean modular angular code that talks to a RESTful API endpoints.
@@ -21,7 +18,6 @@ DELETE /1 ← deletes the todo item, with id = 1
               
 ###  We would like to see the following:
 
-* JS code unit tests
 * Modular Angular code 
 * Dependency injection 
 
@@ -42,9 +38,6 @@ Setup of the project should be easy and detailed.
 #### clone the repo
 Go to your developer folder
 Clone this project repository to your local machine
-
-#### change into the repo directory
-`cd tech-test`
 
 #### install
 `npm install`
