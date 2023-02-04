@@ -1,11 +1,13 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {FormControl} from '@angular/forms';
-import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {distinctUntilChanged, finalize, shareReplay, startWith, switchMap, takeUntil} from 'rxjs/operators';
+import {finalize, shareReplay, switchMap, takeUntil} from 'rxjs/operators';
 import {HomePageService} from '../../home-page.service';
 import {Task} from '../../../../shared/interfaces/task.interface';
+import {Mixin} from 'ts-mixer';
+import {MixinDestroy} from '../../../../shared/mixins/mixin-destroy';
+import {MixinFilterByInput} from '../../../../shared/mixins/mixin-filter-by-input';
 
 @Component({
   selector: 'app-task-list',
@@ -13,32 +15,24 @@ import {Task} from '../../../../shared/interfaces/task.interface';
   styleUrls: ['./task-list.component.scss'],
   providers: [HomePageService]
 })
-export class TaskListComponent implements OnInit, OnDestroy {
+export class TaskListComponent extends Mixin(MixinDestroy, MixinFilterByInput) implements OnInit {
   tasks$!: Observable<Task[]>;
   taskToDelete: BehaviorSubject<Task>;
   deleteChange$: BehaviorSubject<boolean>;
-  filter!: FormControl;
   filterChange$: Observable<any>;
-  private destroy$: Subject<void>;
 
   constructor(
     private router: Router,
     private homePageService: HomePageService,
     private modalService: NgbModal
   ) {
+    super();
     this.taskToDelete = new BehaviorSubject<Task>(null);
     this.deleteChange$ = new BehaviorSubject<boolean>(null);
-    this.filter = new FormControl('');
-    this.destroy$ = new Subject<void>();
+    this.filterChange$ = this.initFilterByInput().pipe(takeUntil(this.destroy$));
   }
 
   ngOnInit(): void {
-    this.filterChange$ = this.filter.valueChanges
-      .pipe(
-        startWith(''),
-        distinctUntilChanged(),
-        takeUntil(this.destroy$)
-      );
 
     this.tasks$ = combineLatest([this.filterChange$, this.deleteChange$])
       .pipe(
@@ -47,11 +41,6 @@ export class TaskListComponent implements OnInit, OnDestroy {
         }),
         shareReplay(1)
       );
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   updateTask(task: Task) {
